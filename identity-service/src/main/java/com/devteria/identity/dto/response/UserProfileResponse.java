@@ -1,4 +1,4 @@
-package com.devteria.profile.dto.response;
+package com.devteria.identity.dto.response;
 
 import java.time.LocalDate;
 
@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class UserProfileResponse {
 
     String id;
+    String userId;
     String firstName;
     String lastName;
     LocalDate dob;

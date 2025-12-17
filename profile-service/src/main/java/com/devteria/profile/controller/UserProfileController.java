@@ -1,9 +1,11 @@
 package com.devteria.profile.controller;
 
 import org.springframework.web.bind.annotation.*;
+
 import com.devteria.profile.dto.request.ProfileCreationRequest;
 import com.devteria.profile.dto.response.UserProfileResponse;
 import com.devteria.profile.service.UserProfileService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,5 +26,4 @@ public class UserProfileController {
     UserProfileResponse getProfile(@PathVariable String profileId) {
         return userProfileService.getProfile(profileId);
     }
-
 }
