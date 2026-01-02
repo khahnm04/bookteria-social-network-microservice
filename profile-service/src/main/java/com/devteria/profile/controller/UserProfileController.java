@@ -6,6 +6,7 @@ import com.devteria.profile.service.UserProfileService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +18,11 @@ public class UserProfileController {
     @GetMapping("/users/{profileId}")
     UserProfileResponse getProfile(@PathVariable String profileId) {
         return userProfileService.getProfile(profileId);
+    }
+
+    @GetMapping("/users")
+    List<UserProfileResponse> getAllProfiles() {
+        return userProfileService.getAllProfiles();
     }
 
 }
