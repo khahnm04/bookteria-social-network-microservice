@@ -10,7 +10,7 @@ import com.devteria.identity.dto.request.ProfileCreationRequest;
 import com.devteria.identity.dto.response.UserProfileResponse;
 
 @FeignClient(
-    name = "profile-service",
+    name = "notification-service",
     url = "${app.services.profile}",
     configuration = { AuthenticationRequestInterceptor.class }
 )
