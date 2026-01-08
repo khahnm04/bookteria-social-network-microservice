@@ -1,0 +1,40 @@
+name: bookteria
+services:
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - '9094:9094'
+    environment:
+      # --- ĐỊNH DANH NODE ---
+      KAFKA_NODE_ID: 0
+      KAFKA_PROCESS_ROLES: controller,broker
+      # Cấu hình Controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      # --- CẤU HÌNH MẠNG (QUAN TRỌNG) ---
+      # Listeners: Các cổng mà Kafka mở bên trong container
+      # - :9092 (PLAINTEXT) -> Dành cho các microservice khác TRONG mạng Docker
+      # - :9093 (CONTROLLER) -> Dành cho nội bộ Kafka quản lý cluster
+      # - :9094 (EXTERNAL) -> Dành cho máy tính của bạn (Windows) kết nối vào
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+
+      # Advertised Listeners: Địa chỉ Kafka "quảng cáo" cho client biết để kết nối
+      # - Các service trong Docker sẽ gọi: kafka:9092
+      # - Máy thật của bạn sẽ gọi: localhost:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+
+      # Map giao thức bảo mật
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+
+      # --- CẤU HÌNH TỐI ƯU CHO 1 NODE (Tránh lỗi khởi động) ---
+      # Vì bạn chạy 1 mình, replication factor phải là 1, nếu mặc định là 3 sẽ lỗi
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      
+      # Đường dẫn lưu log (để sau này map volume không bị mất dữ liệu)
+      KAFKA_LOG_DIRS: /tmp/kafka-logs
