@@ -22,6 +22,9 @@ public class User {
 
     String password;
 
+    @Column(name = "email", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+    String email;
+
     @ManyToMany
     Set<Role> roles;
 
