@@ -1,5 +1,6 @@
 package com.devteria.notification.controller;
 
+import com.devteria.notification.dto.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 import com.devteria.notification.dto.response.UserProfileResponse;
 import com.devteria.notification.service.UserProfileService;
@@ -23,6 +24,13 @@ public class UserProfileController {
     @GetMapping("/users")
     List<UserProfileResponse> getAllProfiles() {
         return userProfileService.getAllProfiles();
+    }
+
+    @GetMapping("/users/my-profile")
+    ApiResponse<UserProfileResponse> getMyProfile() {
+        return ApiResponse.<UserProfileResponse>builder()
+                .result(userProfileService.getMyProfile())
+                .build();
     }
 
 }

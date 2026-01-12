@@ -1,6 +1,9 @@
 package com.devteria.notification.service;
 
+import com.devteria.notification.exception.AppException;
+import com.devteria.notification.exception.ErrorCode;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.devteria.notification.dto.request.ProfileCreationRequest;
 import com.devteria.notification.dto.response.UserProfileResponse;
@@ -41,6 +44,18 @@ public class UserProfileService {
         var profiles = userProfileRepository.findAll();
 
         return profiles.stream().map(userProfileMapper::toUserProfileResponse).toList();
+    }
+
+    public UserProfileResponse getMyProfile() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+
+        System.out.println(userId);
+
+        var profile = userProfileRepository.findByUserId(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        return userProfileMapper.toUserProfileResponse(profile);
     }
 
 }
